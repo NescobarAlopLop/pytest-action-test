@@ -1,2 +1,4 @@
-pytest
 unittest
+pytest
+pytest-cov
+pytest-html
