@@ -3,3 +3,10 @@ def sum(
     b: int,
 ) -> int:
     return a + b
+
+
+def square(
+    a: int,
+    power: int,
+) -> int:
+    return a ** power
