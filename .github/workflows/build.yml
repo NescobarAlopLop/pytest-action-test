@@ -27,10 +27,6 @@ jobs:
 
       - name: Build coverage file
         run: |
-          python3 -m pytest \                                                     
-            --verbose \
-            --html=./pytest_report/index.html \
-            --cov-report=html:./pytest_report/cov \
-            --cov=. > pytest-coverage.txt
+          python3 -m pytest --cache-clear --cov=. > pytest-coverage.txt
       - name: Comment coverage
         uses: coroo/pytest-coverage-commentator@v1.0.2
