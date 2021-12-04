@@ -17,3 +17,8 @@ def multiply(
     b: int,
 ) -> int:
     return a * b
+
+def action(
+    a,
+):
+    pass
