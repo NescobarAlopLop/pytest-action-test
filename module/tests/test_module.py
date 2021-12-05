@@ -28,3 +28,4 @@ class TestModule(
                 power=2,
             )
         )
+        # just to change a file
