@@ -41,12 +41,9 @@ jobs:
       - name: Build coverage file
         run: |
           python3 -m pytest --cache-clear --cov=. > pytest-coverage.txt
-     
-      - name: Set selected color
-        run: echo '::set-output name=SELECTED_COLOR::$(cat pytest-coverage.txt)'
-        id: random-color-generator
-      - name: Get color
-        run: echo "The selected color is ${{ steps.random-color-generator.outputs.SELECTED_COLOR }}"
+      - name: Read pytest coverage into evn variable
+        run: |
+          echo ::set-env name=TAG_NAME::$(cat pytest-coverage.txt)
 
       - name: Print changed files
         run: |
@@ -69,5 +66,5 @@ jobs:
             Build output
             ${{ steps.build.outputs.build-log }}
             changed files: ${{ steps.vars.outputs.modified-py-files }}
-            ${{ steps.random-color-generator.outputs.SELECTED_COLOR }}  
+            ${{ env.TAG_NAME }}
           edit-mode: replace
