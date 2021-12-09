@@ -45,6 +45,5 @@ jobs:
         uses: jamessingleton/leave-a-comment@v1.0.0
         with:
           issue_number: ${{ github.event.issue.number }}
-          issue_type: 'issue'
           comment: 'changed files: ${{ steps.vars.outputs.modified-py-files }}\n cat pytest-coverage.txt'
           token: ${{ secrets.BOT_TOKEN }}
