@@ -15,7 +15,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
+        if: github.event_name == 'push'
+      - name: Checkout
+        uses: actions/checkout@v2
+        if: github.event_name == 'pull_request'
+        with:
+          fetch-depth: 2
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Export Environment Variables
+        uses: ./.github/actions/vars
+        id: vars
       - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -28,37 +37,14 @@ jobs:
       - name: Build coverage file
         run: |
           python3 -m pytest --cache-clear --cov=. > pytest-coverage.txt
-      - name: Comment coverage
-        uses: NescobarAlopLop/pytest-coverage-commentator@v1.0.2
-        with:
-          pytest-coverage: pytest-coverage.txt
-  changedfiles:
-    runs-on: ubuntu-latest
-    # Map a step output to a job output
-    outputs:
-      all: ${{ steps.changes.outputs.all}}
-      ts: ${{ steps.changes.outputs.ts }}
-    steps:
-        # Make sure we have some code to diff.
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  
-      - name: Get changed files
-        id: changes
-        # Set outputs using the command.
+      - name: Print changed files
         run: |
-          echo "::set-output name=all::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})"
-          echo "::set-output name=all::$(git diff --name-only ${{ github.event.before == '0000000000000000000000000000000000000000' && '4b825dc642cb6eb9a060e54bf8d69288fbee4904' || github.event.before }}..${{ github.event.after }})"
-          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
-          echo "::set-output name=ts::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .ts$ | xargs)"
-  lint:
-    runs-on: ubuntu-latest
-    # require the first job to have ran
-    needs: changedfiles
-    # only run there are changed files
-    if: ${{needs.changedfiles.outputs.ts}}
-    steps:
-      - name: echo changed files
-        run: echo ${{needs.changedfiles.outputs.ts}}
-      
+          echo ${{ steps.vars.outputs.modified-py-files }}
+          echo "::set-output name=changed_files::${{ steps.vars.outputs.modified-py-files }}"
+      - name: Create Example Comment
+        uses: jamessingleton/leave-a-comment@v1.0.0
+        with:
+          issue_number: ${{ github.event.issue.number }}
+          issue_type: 'issue'
+          comment: 'changed files: ${{ steps.vars.outputs.modified-py-files }}\n cat pytest-coverage.txt'
+          token: ${{ secrets.BOT_TOKEN }}
