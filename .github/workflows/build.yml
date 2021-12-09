@@ -41,15 +41,22 @@ jobs:
         run: |
           echo ${{ steps.vars.outputs.modified-py-files }}
           echo "::set-output name=changed_files::${{ steps.vars.outputs.modified-py-files }}"
-      - name: Create comment
+      - name: Find Comment
+        uses: peter-evans/find-comment@v1
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Build output
+
+      - name: Create or update comment
         uses: peter-evans/create-or-update-comment@v1
         with:
-          issue-number: 1
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
           body: |
-            This is a multi-line test comment
-            - With GitHub **Markdown** :sparkles:
-            - Created by [create-or-update-comment][1]
+            Build output
+            ${{ steps.build.outputs.build-log }}
             changed files: ${{ steps.vars.outputs.modified-py-files }}\n cat pytest-coverage.txt
-
-            [1]: https://github.com/peter-evans/create-or-update-comment
-          reactions: '+1'
+          edit-mode: replace
+      
