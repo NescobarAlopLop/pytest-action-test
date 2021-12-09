@@ -7,7 +7,7 @@ def sum(
 
 def square(
     a: int,
-    power: int,
+    power: int = 1,
 ) -> int:
     return a ** power
 
