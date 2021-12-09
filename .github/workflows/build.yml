@@ -41,10 +41,15 @@ jobs:
         run: |
           echo ${{ steps.vars.outputs.modified-py-files }}
           echo "::set-output name=changed_files::${{ steps.vars.outputs.modified-py-files }}"
-      - name: Create Example Comment
-        uses: jamessingleton/leave-a-comment@v1.0.0
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v1
         with:
-          name: 'commenter name?'
-          issue_number: ${{ github.event.issue.number }}
-          comment: 'changed files: ${{ steps.vars.outputs.modified-py-files }}\n cat pytest-coverage.txt'
-          token: ${{ secrets.BOT_TOKEN }}
+          issue-number: 1
+          body: |
+            This is a multi-line test comment
+            - With GitHub **Markdown** :sparkles:
+            - Created by [create-or-update-comment][1]
+            changed files: ${{ steps.vars.outputs.modified-py-files }}\n cat pytest-coverage.txt
+
+            [1]: https://github.com/peter-evans/create-or-update-comment
+          reactions: '+1'
