@@ -41,9 +41,12 @@ jobs:
       - name: Build coverage file
         run: |
           python3 -m pytest --cache-clear --cov=. > pytest-coverage.txt
-      - name: Read pytest coverage into evn variable
+      - name: Set the value
+        id: step_one
         run: |
-          echo ::set-env name=TAG_NAME::$(cat pytest-coverage.txt)
+          echo 'COVERAGE<<EOF' >> $GITHUB_ENV
+          cat pytest-coverage.txt >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
 
       - name: Print changed files
         run: |
@@ -66,5 +69,5 @@ jobs:
             Build output
             ${{ steps.build.outputs.build-log }}
             changed files: ${{ steps.vars.outputs.modified-py-files }}
-            ${{ env.TAG_NAME }}
+            ${{ env.COVERAGE }}
           edit-mode: replace
