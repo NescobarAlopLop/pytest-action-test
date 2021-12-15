@@ -72,8 +72,5 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             Pytest covereage results of changed files
-            ${{ grep -f modified-files.txt pytest-coverage.txt }}
-            ${{ steps.build.outputs.build-log }}
-            changed files: ${{ steps.vars.outputs.modified-py-files }}
             ${{ env.COVERAGE }}
           edit-mode: replace
