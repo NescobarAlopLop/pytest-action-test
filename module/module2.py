@@ -16,4 +16,5 @@ def multiply(
     a: int,
     b: int,
 ) -> int:
+    print('mul')
     return a * b

@@ -9,6 +9,7 @@ def square(
     a: int,
     power: int = 1,
 ) -> int:
+    print('square')
     return a ** power
 
 
