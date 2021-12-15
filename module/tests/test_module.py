@@ -2,6 +2,7 @@ import unittest
 
 
 from .. import module
+from .. import module2
 
 
 class TestModule(
@@ -12,7 +13,7 @@ class TestModule(
     ):
         self.assertEqual(
             first=3,
-            second=module.sum(
+            second=module2.sum(
                 a=1,
                 b=2,
             )
