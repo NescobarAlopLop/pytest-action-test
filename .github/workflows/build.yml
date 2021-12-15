@@ -45,12 +45,13 @@ jobs:
           echo check results
           cat pytest-coverage.txt
           cat modified-files.txt
-      # - name: Set the value
-      #   id: step_one
-      #   run: |
-      #     echo 'COVERAGE<<EOF' >> $GITHUB_ENV
-      #     cat pytest-coverage.txt >> $GITHUB_ENV
-      #     echo 'EOF' >> $GITHUB_ENV
+          grep -f modified-files.txt pytest-coverage.txt > cov_result.txt
+      - name: Set the value
+        id: step_one
+        run: |
+          echo 'COVERAGE<<EOF' >> $GITHUB_ENV
+          cat cov_result.txt >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
 
       - name: Print changed files
         run: |
@@ -72,4 +73,7 @@ jobs:
           body: |
             Pytest covereage results of changed files
             ${{ grep -f modified-files.txt pytest-coverage.txt }}
+            ${{ steps.build.outputs.build-log }}
+            changed files: ${{ steps.vars.outputs.modified-py-files }}
+            ${{ env.COVERAGE }}
           edit-mode: replace
