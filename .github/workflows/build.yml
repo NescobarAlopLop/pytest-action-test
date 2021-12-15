@@ -63,7 +63,7 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
-          body-includes: Build output
+          body-includes: Pytest covereage results of changed files
 
       - name: Create or update comment
         uses: peter-evans/create-or-update-comment@v1
