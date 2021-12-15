@@ -41,6 +41,7 @@ jobs:
       - name: Build coverage file
         run: |
           python3 -m pytest --cache-clear --cov=. > pytest-coverage.txt
+          ${{ steps.vars.outputs.modified-py-files }} > modified-files.txt
       - name: Set the value
         id: step_one
         run: |
@@ -66,8 +67,6 @@ jobs:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Build output
-            ${{ steps.build.outputs.build-log }}
-            changed files: ${{ steps.vars.outputs.modified-py-files }}
-            ${{ env.COVERAGE }}
+            Pytest covereage results of changed files
+            ${{ grep -f modified-files.txt pytest-coverage.txt }}
           edit-mode: replace
