@@ -38,16 +38,19 @@ jobs:
         run: |
           pip3 install -r requirements.txt
 
-      - name: Build coverage file
+      - name: Run tests and generate a coverage file
         run: |
           python3 -m pytest --cache-clear --cov=. > pytest-coverage.txt
-          ${{ steps.vars.outputs.modified-py-files }} > modified-files.txt
-      - name: Set the value
-        id: step_one
-        run: |
-          echo 'COVERAGE<<EOF' >> $GITHUB_ENV
-          cat pytest-coverage.txt >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          echo ${{ steps.vars.outputs.modified-py-files }} > modified-files.txt
+          echo check results
+          cat pytest-coverage.txt
+          cat modified-files.txt
+      # - name: Set the value
+      #   id: step_one
+      #   run: |
+      #     echo 'COVERAGE<<EOF' >> $GITHUB_ENV
+      #     cat pytest-coverage.txt >> $GITHUB_ENV
+      #     echo 'EOF' >> $GITHUB_ENV
 
       - name: Print changed files
         run: |
