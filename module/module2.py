@@ -18,3 +18,6 @@ def multiply(
 ) -> int:
     print('mul')
     return a * b
+
+def asdf():
+    pass
