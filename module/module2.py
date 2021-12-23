@@ -18,3 +18,10 @@ def multiply(
 ) -> int:
     print('mul')
     return a * b
+
+def multiplyx(
+    a: int,
+    b: int,
+) -> int:
+    print('mul')
+    return a * b
