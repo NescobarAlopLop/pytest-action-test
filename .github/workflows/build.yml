@@ -44,7 +44,7 @@ jobs:
           echo check results
           cat pytest-coverage.txt
           cat modified-files.txt
-          grep -f modified-files.txt pytest-coverage.txt > cov_result.txt
+#          grep -f modified-files.txt pytest-coverage.txt > cov_result.txt
       - name: Set the value
         id: step_one
         run: |
