@@ -47,7 +47,7 @@ jobs:
           python3 -m pytest --cache-clear --cov=. > pytest-coverage.txt
           echo ${{ steps.vars.outputs.modified-py-files }} > modified-files.txt
           grep -Fwf modified-files.txt pytest-coverage.txt > cov_result.txt
-          export modified_files_coverage=$(grep -Fwf modified-files.txt pytest-coverage.txt | awk '{print $NF}')
+          export modified_files_coverage=$(grep -Fwf modified-files.txt pytest-coverage.txt | awk '{print $1, $NF}')
           export total_coverage=$(awk '$1 == "TOTAL" {print $NF+0}' pytest-coverage.txt)
           echo "::set-output name=modified_files_coverage::$modified_files_coverage"
           echo "::set-output name=total_coverage::$total_coverage"
