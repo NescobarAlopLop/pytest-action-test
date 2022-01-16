@@ -1,6 +1,9 @@
+name: Vars Action
+description: action that generates the variables
 inputs:
   app-name:
     description: 'Application name'
+    required: false
     default: python-action-test
 outputs:
   modified-py-files:
