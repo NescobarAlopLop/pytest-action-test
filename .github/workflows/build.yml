@@ -39,20 +39,21 @@ jobs:
           pip3 install -r requirements.txt
 
       - name: Run tests and generate a coverage file
+        id: coverage
         run: |
           python3 -m pytest --cache-clear --cov=. > pytest-coverage.txt
           echo ${{ steps.vars.outputs.modified-py-files }} > modified-files.txt
           grep -Fwf modified-files.txt pytest-coverage.txt > cov_result.txt
+          export modified_files_coverage=$(grep -Fwf modified-files.txt pytest-coverage.txt)
+          export total_coverage=$(awk '$1 == "TOTAL" {print $NF+0}' pytest-coverage.txt)
+          echo "::set-output name=modified_files_coverage::$modified_files_coverage"
+          echo "::set-output name=total_coverage::$total_coverage"
       - name: Set the value
         id: step_one
         run: |
           echo 'COVERAGE<<EOF' >> $GITHUB_ENV
           cat cov_result.txt >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-      - name: Print changed files
-        run: |
-          echo ${{ steps.vars.outputs.modified-py-files }}
-          echo "::set-output name=changed_files::${{ steps.vars.outputs.modified-py-files }}"
       - name: Create coverage comment
         uses: peter-evans/create-or-update-comment@v1
         with:
@@ -60,4 +61,6 @@ jobs:
           body: |
             This is latest coverage results on changed files
             ${{ env.COVERAGE }}
+            ${{ steps.coverage.outputs.modified_files_coverage }}
+            Total coverage {{ steps.coverage.outputs.total_coverage }}%
           reactions: '+1'
