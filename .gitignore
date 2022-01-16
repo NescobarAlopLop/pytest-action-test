@@ -2,3 +2,5 @@ __pycache__/
 pytest.xml
 .pytest_cache
 .coverage
+.idea
+.vscode
