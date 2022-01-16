@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.9]
+        python-version: [ 3.9 ]
 
     steps:
       - name: Checkout
@@ -42,35 +42,22 @@ jobs:
         run: |
           python3 -m pytest --cache-clear --cov=. > pytest-coverage.txt
           echo ${{ steps.vars.outputs.modified-py-files }} > modified-files.txt
-          echo check results
-          cat pytest-coverage.txt
-          cat modified-files.txt
-           grep -Fwf modified-files.txt pytest-coverage.txt > cov_result.txt
+          grep -Fwf modified-files.txt pytest-coverage.txt > cov_result.txt
       - name: Set the value
         id: step_one
         run: |
           echo 'COVERAGE<<EOF' >> $GITHUB_ENV
           cat cov_result.txt >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-
       - name: Print changed files
         run: |
           echo ${{ steps.vars.outputs.modified-py-files }}
           echo "::set-output name=changed_files::${{ steps.vars.outputs.modified-py-files }}"
-      - name: Find Comment
-        uses: peter-evans/find-comment@v1
-        id: fc
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: Pytest covereage results of changed files
-
-      - name: Create or update comment
+      - name: Create coverage comment
         uses: peter-evans/create-or-update-comment@v1
         with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Pytest covereage results of changed files
+            This is latest coverage results on changed files
             ${{ env.COVERAGE }}
-          edit-mode: replace
+          reactions: '+1'
