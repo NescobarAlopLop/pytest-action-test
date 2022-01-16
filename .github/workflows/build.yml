@@ -57,7 +57,8 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            This is latest coverage results on changed files
+            Coverage results on changed files:
             ${{ steps.coverage.outputs.modified_files_coverage }}
+            
             Total coverage ${{ steps.coverage.outputs.total_coverage }}%
           reactions: '+1'
