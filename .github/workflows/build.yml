@@ -29,6 +29,10 @@ jobs:
       - name: Export Environment Variables
         uses: ./.github/actions/vars
         id: vars
+      - name: Print changed files
+        run: |
+          echo ${{ steps.vars.outputs.modified-py-files }}
+          echo "::set-output name=changed_files::${{ steps.vars.outputs.modified-py-files }}"
       - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
