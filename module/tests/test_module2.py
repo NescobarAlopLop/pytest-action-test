@@ -18,13 +18,15 @@ class TestModule(
             )
         )
 
-    def test_square(
-        self,
-    ):
-        self.assertEqual(
-            first=9,
-            second=module2.square(
-                a=3,
-                power=2,
-            )
-        )
+    #
+    # def test_square(
+    #     self,
+    # ):
+    #     self.assertEqual(
+    #         first=9,
+    #         second=module2.square(
+    #             a=3,
+    #             power=2,
+    #         )
+    #     )
+
