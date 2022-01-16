@@ -11,6 +11,12 @@ def square(
 ) -> int:
     return a ** power
 
+def square2(
+    a: int,
+    power: int = 1,
+) -> int:
+    return a ** power
+
 
 def multiply(
     a: int,
