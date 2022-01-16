@@ -43,12 +43,12 @@ jobs:
           pip3 install -r requirements.txt
       - name: Run tests and generate a coverage file
         run: |
-          python -m pytest --cache-clear --cov=. > pytest-coverage.txt
-#          echo ${{ steps.vars.outputs.modified-py-files }} > modified-files.txt
-#          echo check results
-#          cat pytest-coverage.txt
-#          cat modified-files.txt
-#          grep -f modified-files.txt pytest-coverage.txt > cov_result.txt
+          python3 -m pytest --cache-clear --cov=. > pytest-coverage.txt
+          echo ${{ steps.vars.outputs.modified-py-files }} > modified-files.txt
+          echo check results
+          cat pytest-coverage.txt
+          cat modified-files.txt
+          grep -f modified-files.txt pytest-coverage.txt > cov_result.txt
       - name: Set the value
         id: step_one
         run: |
