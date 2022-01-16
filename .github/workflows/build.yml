@@ -48,19 +48,12 @@ jobs:
           export total_coverage=$(awk '$1 == "TOTAL" {print $NF+0}' pytest-coverage.txt)
           echo "::set-output name=modified_files_coverage::$modified_files_coverage"
           echo "::set-output name=total_coverage::$total_coverage"
-      - name: Set the value
-        id: step_one
-        run: |
-          echo 'COVERAGE<<EOF' >> $GITHUB_ENV
-          cat cov_result.txt >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
       - name: Create coverage comment
         uses: peter-evans/create-or-update-comment@v1
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             This is latest coverage results on changed files
-            ${{ env.COVERAGE }}
             ${{ steps.coverage.outputs.modified_files_coverage }}
-            Total coverage {{ steps.coverage.outputs.total_coverage }}%
+            Total coverage ${{ steps.coverage.outputs.total_coverage }}%
           reactions: '+1'
