@@ -20,15 +20,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         if: github.event_name == 'push'
+
       - name: Checkout
         uses: actions/checkout@v2
         if: github.event_name == 'pull_request'
         with:
           fetch-depth: 2
           ref: ${{ github.event.pull_request.head.sha }}
+
       - name: Export Environment Variables
         uses: ./.github/actions/vars
         id: vars
+
       - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -38,16 +41,17 @@ jobs:
         run: |
           pip3 install -r requirements.txt
 
-      - name: Run tests and generate a coverage file
+      - name: Run tests and generate a coverage report
         id: coverage
         run: |
           python3 -m pytest --cache-clear --cov=. > pytest-coverage.txt
           echo ${{ steps.vars.outputs.modified-py-files }} > modified-files.txt
           grep -Fwf modified-files.txt pytest-coverage.txt > cov_result.txt
-          export modified_files_coverage=$(grep -Fwf modified-files.txt pytest-coverage.txt)
+          export modified_files_coverage=$(grep -Fwf modified-files.txt pytest-coverage.txt | awk '{print $NF}')
           export total_coverage=$(awk '$1 == "TOTAL" {print $NF+0}' pytest-coverage.txt)
           echo "::set-output name=modified_files_coverage::$modified_files_coverage"
           echo "::set-output name=total_coverage::$total_coverage"
+
       - name: Create coverage comment
         uses: peter-evans/create-or-update-comment@v1
         with:
