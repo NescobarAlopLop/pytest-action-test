@@ -59,6 +59,6 @@ jobs:
           body: |
             Coverage results on changed files:
             ${{ steps.coverage.outputs.modified_files_coverage }}
-            
+
             Total codebase coverage ${{ steps.coverage.outputs.total_coverage }}
           reactions: '+1'
